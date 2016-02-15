@@ -216,9 +216,12 @@ def _convert_val(val, dtype):
     if not val.strip():
         return None
     elif dtype == 'date':
-        match = re.match(r'(\d{4}-\d{2}-\d{2})', val)
+        match = re.match(r'(\d{4}-\d{2}-\d{2})(-\d{2}:\d{2})?', val)
         if match:
-            return datetime.strptime(match.group(), '%Y-%m-%d')
+            if match.group(2) is None:
+                return datetime.strptime(match.group(), '%Y-%m-%d')
+            else:
+                return datetime.strptime(match.string, '%Y-%m-%d-%H:%M')
         else:
             return datetime.strptime(re.match(r'(\d{4}-\d{2})', val).group(), '%Y-%m')
     elif dtype == 'int':
